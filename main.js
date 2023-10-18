@@ -2,8 +2,8 @@ var gl;
 var checkerPoints = [];
 var w;
 var h;
-var rowMax = 8;
-var _8 = 0.125 // eighth of 1.0
+var rowMax = 4;
+var _8 = 0.25
 
 window.onload = function init()
 {
@@ -17,12 +17,13 @@ window.onload = function init()
 
     var vertices = [
         vec2(-1, 1),
-        vec2(-0.875, 1),
-        vec2(-1, 0.875),
-        vec2(-0.875, 0.875)
+        vec2(-0.75, 1),
+        vec2(-1, 0.75),
+        vec2(-0.75, 0.75)
     ];
 
-    makeRow(vertices, 0)
+    // makeRow(vertices, 0)
+    makeGrid(vertices)
 
     //  Configure WebGL
     gl.viewport( 0, 0, canvas.width, canvas.height );
@@ -43,20 +44,15 @@ window.onload = function init()
         gl.vertexAttribPointer( vPosition, 2, gl.FLOAT, false, 0, 0 );
         gl.enableVertexAttribArray( vPosition );
 
-        render(false, e);
+        render(e);
     });
 };
-
-// Make a square
-function square(vertices) {
-    checkerPoints.push(vertices);
-}
 
 function translateY(vector, translateAmountY){
     var x = vector[0],
         y = vector[1]
 
-    return [x, y + translateAmountY]
+    return [x, y - translateAmountY]
 }
 
 function translateX(vector, translateAmountX){
@@ -72,24 +68,38 @@ function makeRow(v, i){
         wCounter = _8;
     }
 
-    i++
-
-    for(let x = 0; x < 10; x++){
+    for(let x = 0; x < rowMax; x++){
         s = [
             translateX(v[0], wCounter),
             translateX(v[1], wCounter),
             translateX(v[2], wCounter),
             translateX(v[3], wCounter)
         ]
-        square(s);
-        wCounter + _8 + _8;
-        console.log(x)
+        checkerPoints.push(s);
+        wCounter = wCounter + _8 + _8;
+        console.log(x);
     }
 }
 
-function render(clear) {
-    if(clear){
-        gl.clear( gl.COLOR_BUFFER_BIT );
+function makeGrid(v){
+    var hCounter = 0;
+    for(i = 0; i < rowMax * 2; i++){
+        s = [
+            translateY(v[0], hCounter),
+            translateY(v[1], hCounter),
+            translateY(v[2], hCounter),
+            translateY(v[3], hCounter)
+        ]
+        makeRow(s, i)
+        hCounter = hCounter + _8;
+        console.log
     }
-    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+}
+
+function render(e) {
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, e.length);
+}
+
+function clear(){
+    gl.clear( gl.COLOR_BUFFER_BIT );
 }

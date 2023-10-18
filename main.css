@@ -1,10 +1,13 @@
 html {
     margin: 1%;
     color: lightgray;
-    background-color:#333333;
     font-family: Roboto;
 }
 
 a {
     color:aqua;
+}
+
+canvas {
+    outline: medium black solid;
 }
